@@ -1,18 +1,16 @@
 package com.BooksAndJournals.BooksAndJournals.controller;
 
-import com.BooksAndJournals.BooksAndJournals.model.Book;
-import com.BooksAndJournals.BooksAndJournals.model.Resource;
-import com.BooksAndJournals.BooksAndJournals.model.UpdateResourceAvailabilityRequest;
+import com.BooksAndJournals.BooksAndJournals.model.*;
 import com.BooksAndJournals.BooksAndJournals.service.ResourceServices;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/resource")
@@ -23,73 +21,74 @@ public class ResourceController {
     private ResourceServices resourceServices;
 
     @GetMapping("/book")
+    @Operation(summary = "FIND ALL BOOKS")
     public List<Resource> findAllBooks(){
         return resourceServices.getAllBooks();
     }
 
     @GetMapping("/journals")
+    @Operation(summary = "FIND ALL JOURNALS")
     public List<Resource> findAllJournals(){
         return resourceServices.getAllJournals();
     }
 
     @GetMapping()
+    @Operation(summary = "FIND RESOURCE BY ID")
     public Resource findById(@RequestParam Long id){
         return  resourceServices.getById(id).orElseThrow(() -> new RuntimeException("The ID Not Exist"));
     }
     @GetMapping("/available")
-    public List<Resource> findAllAvailabile(){
+    @Operation(summary = "FIND AVAILABLE RESOURCE")
+    public List<Resource> findAllAvailable(){
         return  resourceServices.getAvailableResource();
     }
 
+    @GetMapping("/not-available")
+    @Operation(summary = "FIND NOT AVAILABLE RESOURCE")
+    public List<Resource> findAllNotAvailable(){
+        return  resourceServices.getNotAvailableResource();
+    }
     @PostMapping()
-   public ResponseEntity<Resource> addResource(@Valid @RequestBody Resource resource){
-        return new ResponseEntity<Resource>(resourceServices.addResource(resource), HttpStatus.OK);}
+    @Operation(summary = "ADD NEW RESOURCE")
+   public ResponseEntity<Resource> addResource(@Valid @RequestBody  ResourceRequest resource ){
+
+
+        Resource resource1 = new Resource();
+        resource1.setName(resource.getName());
+        resource1.setAuthor(resource.getAuthor());
+        resource1.setDescription(resource.getDescription());
+        resource1.setAvailability(resource.isAvailability());
+        resource1.setResourceType(Type.fromValue(resource.getResourceType()));
+    return new ResponseEntity<Resource>(resourceServices.addResource(resource1), HttpStatus.OK);
+
+
+
+    }
 
     @DeleteMapping()
-    public String deleteResource(@RequestParam Long id){
+    @Operation(summary = "DELETE RESOURCE")
+    public String deleteResource(@Valid @RequestParam Long id){
        resourceServices.deleteResource(id);
        return "Delete Successfully";}
 
     @PutMapping("/available")
+    @Operation(summary = "UPDATE RESOURCE")
     public  String updateResource(@Valid @RequestBody UpdateResourceAvailabilityRequest request) {
         resourceServices.updateResource(request.getId(), request.isAvailability());
         return "Update Successfully";
     }
 
-
-    //
-//    @Operation(summary = "FIND ALL BOOKS")
-//    @GetMapping("/book")
-//    public List<Book> getAllBooks(){
-//        return bookServices.findAllBooks();
-//    }
-//
-//    @Operation(summary = "FIND BOOK BY ID")
-//    @GetMapping("/bookById")
-//    public Book getBookID(@RequestParam long id) {
-//        return bookServices.getBookById(id);}
-//
-//
-//    @Operation(summary = "ADD NEW BOOK")
-//    @PostMapping("/book")
-//    public ResponseEntity<Book> addBook(@Valid @RequestBody Book book){
-//        bookServices.addBook(book);
-//        return new ResponseEntity<Book>(book, HttpStatus.OK);}
-//
-//    @Operation(summary = "HANDEL EXIST BOOK")
-//    @PutMapping("/book")
-//    public  ResponseEntity<Book> updateBook(@Valid @RequestBody Book book){
-//        bookServices.updateBook(book);
-//        return new ResponseEntity<Book>(book, HttpStatus.OK);}
-//
-//    @Operation(summary = "DELETE BOOK")
-//    @DeleteMapping("/book")
-//    public String deleteBook(@RequestParam Long id){
-//        bookServices.deleteBook(id);
-//        return "Delete Successfully";}
-//
-//
-
-
+    @Operation(summary = "BORROWING BOOK OR JOURNAL")
+    @PutMapping("/borrow")
+    public String borrowResource(@RequestBody BorrowResourceRequest borrowResourceRequest){
+        resourceServices.borrowResource(borrowResourceRequest);
+        return "Borrowed Successfully";
+    }
+    @Operation(summary = "RETURNING BOOK OR JOURNAL")
+    @PutMapping("/return")
+    public String returnResource(@RequestBody ReturnResourceRequest returnResourceRequest){
+        resourceServices.returnResource(returnResourceRequest);
+        return "Returned Successfully";
+    }
 
 }

@@ -1,4 +1,5 @@
 package com.BooksAndJournals.BooksAndJournals.model;
+
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,6 @@ public class ErrorResponse {
     private String statusCode;
     private Date time;
     private List<String> details;
-
 
     public ErrorResponse(String message, String statusCode, List<String> details) {
         this.message = message;
@@ -51,6 +51,4 @@ public class ErrorResponse {
     public List<String> getDetails() {
         return details;
     }
-
-
 }

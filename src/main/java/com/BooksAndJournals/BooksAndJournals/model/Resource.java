@@ -1,34 +1,29 @@
 package com.BooksAndJournals.BooksAndJournals.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public abstract class Resource {
+@Table(name = "RESOURCE")
+public class Resource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name = "RESOURCE_NAME")
     private String name;
-    private  String description;
+    @Column(name = "RESOURCE_DESCRIPTION")
+    private String description;
+    @Column(name = "RESOURCE_AUTHOR")
     private String author;
-    private  boolean availability ;
-
+    @Column(name = "RESOURCE_AVAILABILITY")
+    private boolean availability ;
     @Enumerated(value = EnumType.STRING)
+    @Column(name = "RESOURCE_TYPE")
     private Type resourceType;
-
-
-
-
-
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User borrowingBy;
 }

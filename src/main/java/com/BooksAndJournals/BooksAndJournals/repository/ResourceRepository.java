@@ -11,6 +11,7 @@ import java.util.List;
 public interface ResourceRepository extends JpaRepository<Resource,Long> {
 
 
+    Resource save(Resource resource);
     List<Resource> findByResourceType(Type type);
     List<Resource> findByAvailability(boolean availability);
 }

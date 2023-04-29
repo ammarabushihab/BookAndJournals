@@ -1,5 +1,4 @@
 package com.BooksAndJournals.BooksAndJournals.error;
-
 import com.BooksAndJournals.BooksAndJournals.model.ErrorResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,12 +10,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
+
 
 
     @ExceptionHandler(Exception.class)
@@ -43,7 +42,6 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
         ErrorResponse error = new ErrorResponse("Validation Failed",HttpStatus.BAD_REQUEST.toString(), details);
         return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
     }
-
-
-
 }
+
+

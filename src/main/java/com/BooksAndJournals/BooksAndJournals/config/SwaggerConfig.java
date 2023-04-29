@@ -29,7 +29,7 @@ public class SwaggerConfig {
     public GroupedOpenApi setupApi() {
         String packagesToscan[] = { "com.BooksAndJournals.BooksAndJournals" };
         return GroupedOpenApi.builder()
-                .group("Book API")
+                .group("BOOK AND JOURNAL API")
                 .packagesToScan(packagesToscan)
                 .addOperationCustomizer(appTokenHeaderParam())
                 .build();
