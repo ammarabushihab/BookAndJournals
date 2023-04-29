@@ -17,6 +17,7 @@ http://localhost:7777/swagger-ui/index.html
 
 Step 5:
 Access the h2 DB console by using the bellow details:
+JDBC URL:jdbc:h2:mem:testdb
 DB Link:http://localhost:7777/h2-console/
 UserName:sa
 Pass:password
